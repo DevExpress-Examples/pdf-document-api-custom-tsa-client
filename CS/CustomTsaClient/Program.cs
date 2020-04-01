@@ -13,7 +13,7 @@ namespace CustomTsaClient
             using (var signer = new PdfDocumentSigner(@"Document.pdf"))
             {
                 //Create a custom timestamp client instance:
-                ITsaClient tsaClient = new BouncyCastleTsaClient(new Uri(@"http://timestamp.apple.com/ts01"), new Sha256Digest());
+                ITsaClient tsaClient = new BouncyCastleTsaClient(new Uri(@"https://freetsa.org/tsr"), new Sha256Digest());
 
                 //Create a PKCS#7 signature:
                 Pkcs7Signer pkcs7Signature = new Pkcs7Signer(@"testcert.pfx", "123", PdfHashAlgorithm.SHA256, tsaClient);                

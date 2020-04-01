@@ -13,7 +13,7 @@ Namespace CustomTsaClient
 		Shared Sub Main(ByVal args() As String)
 			Using signer = New PdfDocumentSigner("Document.pdf")
 				'Create a custom timestamp client instance:
-				Dim tsaClient As ITsaClient = New BouncyCastleTsaClient(New Uri("http://timestamp.apple.com/ts01"), New Sha256Digest())
+				Dim tsaClient As ITsaClient = New BouncyCastleTsaClient(New Uri("https://freetsa.org/tsr"), New Sha256Digest())
 
 				'Create a PKCS#7 signature:
 				Dim pkcs7Signature As New Pkcs7Signer("testcert.pfx", "123", PdfHashAlgorithm.SHA256, tsaClient)
