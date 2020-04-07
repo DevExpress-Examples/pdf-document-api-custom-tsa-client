@@ -61,10 +61,10 @@ namespace CustomTsaClient
                 requestStream.Write(requestBytes, 0, requestBytes.Length);
             
             //Get a responce from the server:
-            HttpWebResponse httpResponce = (HttpWebResponse)httpRequest.GetResponse();
-            using (Stream respStream = new BufferedStream(httpResponce.GetResponseStream()))
+            HttpWebResponse httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            using (Stream respStream = new BufferedStream(httpResponse.GetResponseStream()))
             {
-                //Read the responce:
+                //Read the response:
                 TimeStampResponse response = new TimeStampResponse(respStream);
                 response.Validate(request);
                 PkiFailureInfo failure = response.GetFailInfo();

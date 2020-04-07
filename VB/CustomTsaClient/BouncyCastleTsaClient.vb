@@ -62,8 +62,8 @@ Namespace CustomTsaClient
 				requestStream.Write(requestBytes, 0, requestBytes.Length)
 			End Using
 
-			'Get a responce from the server:
-			Dim httpResponce As HttpWebResponse = CType(httpRequest.GetResponse(), HttpWebResponse)
+			'Get a response from the server:
+			Dim httpResponse As HttpWebResponse = CType(httpRequest.GetResponse(), HttpWebResponse)
 			Using respStream As Stream = New BufferedStream(httpResponce.GetResponseStream())
 				'Read the responce:
 				Dim response As New TimeStampResponse(respStream)
