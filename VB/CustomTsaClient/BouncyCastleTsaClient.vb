@@ -27,8 +27,7 @@ Namespace CustomTsaClient
 			Dim buffer(81919) As Byte
 			hashCalculator.Reset()
 			Dim bytesRead As Integer
-'INSTANT VB WARNING: An assignment within expression was extracted from the following statement:
-'ORIGINAL LINE: while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+
 			bytesRead = stream.Read(buffer, 0, buffer.Length)
 			Do While bytesRead > 0
 				hashCalculator.BlockUpdate(buffer, 0, bytesRead)
@@ -39,7 +38,7 @@ Namespace CustomTsaClient
 			Return result
 		End Function
 
-		Public Function GenerateTimeStamp(ByVal stream As Stream) As Byte()
+		Public Function GenerateTimeStamp(ByVal stream As Stream) As Byte() Implements ITsaClient.GenerateTimeStamp
 			'Generate a timestamp request:
 			Dim tsqGenerator As New TimeStampRequestGenerator()
 			tsqGenerator.SetCertReq(True)
@@ -64,7 +63,7 @@ Namespace CustomTsaClient
 
 			'Get a response from the server:
 			Dim httpResponse As HttpWebResponse = CType(httpRequest.GetResponse(), HttpWebResponse)
-			Using respStream As Stream = New BufferedStream(httpResponce.GetResponseStream())
+			Using respStream As Stream = New BufferedStream(httpResponse.GetResponseStream())
 				'Read the responce:
 				Dim response As New TimeStampResponse(respStream)
 				response.Validate(request)
