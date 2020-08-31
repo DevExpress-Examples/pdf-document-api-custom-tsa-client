@@ -80,6 +80,51 @@ namespace CustomTsaClient
                 return token.GetEncoded();
             }
         }
+
+        public byte[] GenerateTimeStamp(byte[] digest, string digestAlgorithmOID)
+        {
+            //Generate a timestamp request:
+            TimeStampRequestGenerator tsqGenerator = new TimeStampRequestGenerator();
+            tsqGenerator.SetCertReq(true);
+            BigInteger nonce;
+            using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
+            {
+                byte[] nonceValue = new byte[10];
+                generator.GetBytes(nonceValue);
+                nonce = new BigInteger(nonceValue);
+            }
+            string algorithmOid = DigestUtilities.GetObjectIdentifier(hashCalculator.AlgorithmName).Id;
+            TimeStampRequest request = tsqGenerator.Generate(algorithmOid, digest, nonce);
+            byte[] requestBytes = request.GetEncoded();
+
+            //Send the request to a server:
+            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(tsaServerURI);
+            httpRequest.Method = "POST";
+            httpRequest.ContentType = "application/timestamp-query";
+            httpRequest.ContentLength = requestBytes.Length;
+            using (Stream requestStream = httpRequest.GetRequestStream())
+                requestStream.Write(requestBytes, 0, requestBytes.Length);
+
+            //Get a responce from the server:
+            HttpWebResponse httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            using (Stream respStream = new BufferedStream(httpResponse.GetResponseStream()))
+            {
+                //Read the response:
+                TimeStampResponse response = new TimeStampResponse(respStream);
+                response.Validate(request);
+                PkiFailureInfo failure = response.GetFailInfo();
+
+                //Throw an exception if the responce returned an error:                
+                if (failure != null)
+                    throw new Exception($"TimeStamp request to the \"{tsaServerURI}\" failed.");
+                TimeStampToken token = response.TimeStampToken;
+
+                //Throw an exception if the responce doesn't contain the timestamp:
+                if (token == null)
+                    throw new Exception($"TimeStamp request to the \"{tsaServerURI}\" failed.");
+                return token.GetEncoded();
+            }
+        }
     }
 
 }
