@@ -82,6 +82,51 @@ Namespace CustomTsaClient
 				Return token.GetEncoded()
 			End Using
 		End Function
+
+		Public Function GenerateTimeStamp(digest() As Byte, digestAlgorithmOID As String) As Byte() Implements ITsaClient.GenerateTimeStamp
+			'Generate a timestamp request:
+			Dim tsqGenerator As New TimeStampRequestGenerator()
+			tsqGenerator.SetCertReq(True)
+			Dim nonce As BigInteger
+			Using generator As RandomNumberGenerator = RandomNumberGenerator.Create()
+				Dim nonceValue(9) As Byte
+				generator.GetBytes(nonceValue)
+				nonce = New BigInteger(nonceValue)
+			End Using
+			Dim algorithmOid As String = DigestUtilities.GetObjectIdentifier(hashCalculator.AlgorithmName).Id
+			Dim request As TimeStampRequest = tsqGenerator.Generate(algorithmOid, digest, nonce)
+			Dim requestBytes() As Byte = request.GetEncoded()
+
+			'Send the request to a server:
+			Dim httpRequest As HttpWebRequest = CType(WebRequest.Create(tsaServerURI), HttpWebRequest)
+			httpRequest.Method = "POST"
+			httpRequest.ContentType = "application/timestamp-query"
+			httpRequest.ContentLength = requestBytes.Length
+			Using requestStream As Stream = httpRequest.GetRequestStream()
+				requestStream.Write(requestBytes, 0, requestBytes.Length)
+			End Using
+
+			'Get a response from the server:
+			Dim httpResponse As HttpWebResponse = CType(httpRequest.GetResponse(), HttpWebResponse)
+			Using respStream As Stream = New BufferedStream(httpResponse.GetResponseStream())
+				'Read the responce:
+				Dim response As New TimeStampResponse(respStream)
+				response.Validate(request)
+				Dim failure As PkiFailureInfo = response.GetFailInfo()
+
+				'Throw an exception if the responce returned an error:                
+				If failure IsNot Nothing Then
+					Throw New Exception($"TimeStamp request to the ""{tsaServerURI}"" failed.")
+				End If
+				Dim token As TimeStampToken = response.TimeStampToken
+
+				'Throw an exception if the responce doesn't contain the timestamp:
+				If token Is Nothing Then
+					Throw New Exception($"TimeStamp request to the ""{tsaServerURI}"" failed.")
+				End If
+				Return token.GetEncoded()
+			End Using
+		End Function
 	End Class
 
 End Namespace
