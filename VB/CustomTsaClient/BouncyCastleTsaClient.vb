@@ -10,6 +10,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Security.Cryptography
 Imports System.Diagnostics
+Imports DevExpress.Office.Tsp
 
 Namespace CustomTsaClient
 	Public Class BouncyCastleTsaClient

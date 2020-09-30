@@ -1,4 +1,6 @@
 ﻿using DevExpress.Pdf;
+using DevExpress.Office.DigitalSignatures;
+using DevExpress.Office.Tsp;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
 using System.IO;
@@ -16,7 +18,7 @@ namespace CustomTsaClient
                 ITsaClient tsaClient = new BouncyCastleTsaClient(new Uri(@"https://freetsa.org/tsr"), new Sha256Digest());
 
                 //Create a PKCS#7 signature:
-                Pkcs7Signer pkcs7Signature = new Pkcs7Signer(@"testcert.pfx", "123", PdfHashAlgorithm.SHA256, tsaClient);                
+                Pkcs7Signer pkcs7Signature = new Pkcs7Signer(@"testcert.pfx", "123", HashAlgorithmType.SHA256, tsaClient);                
                 
                 //Apply the signature to the form field:
                 var signatureBuilder = new PdfSignatureBuilder(pkcs7Signature, "Sign");
