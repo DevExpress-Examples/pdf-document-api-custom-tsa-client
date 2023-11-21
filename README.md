@@ -11,4 +11,4 @@
 
 # PDF Document API - Use a Custom Timestamp Client to Apply Signatures to a Document
 
-The **PDF Document API** allows you to use a timestamp for the signature. The following code sample project shows how to create a custom timestamp client based on the [Bouncy Castle C# API](https://bouncycastle.org/csharp/index.html). 
+The **PDF Document API** allows you to use a timestamp for the signature. The following code sample project shows how to create a custom timestamp client based on the [Bouncy Castle C# API](https://www.bouncycastle.org/csharp/index.html). 
