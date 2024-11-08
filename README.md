@@ -4,15 +4,16 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
-<!-- default file list -->
-*Files to look at*:
-* [Program.cs](./CS/CustomTsaClient/Program.cs) (VB: [Program.vb](./VB/CustomTsaClient/Program.vb))
-* [BouncyCastleTsaClient.cs](./CS/CustomTsaClient/BouncyCastleTsaClient.cs)  (VB :[BouncyCastleTsaClient.vb](./VB/CustomTsaClient/BouncyCastleTsaClient.vb))
-<!-- default file list end -->
 
 # PDF Document API - Use a Custom Timestamp Client to Apply Signatures to a Document
 
 The **PDF Document API** allows you to use a timestamp for the signature. The following code sample project shows how to create a custom timestamp client based on the [Bouncy Castle C# API](https://www.bouncycastle.org/csharp/index.html). 
+
+## Files to Review
+
+* [Program.cs](./CS/CustomTsaClient/Program.cs) (VB: [Program.vb](./VB/CustomTsaClient/Program.vb))
+* [BouncyCastleTsaClient.cs](./CS/CustomTsaClient/BouncyCastleTsaClient.cs)  (VB :[BouncyCastleTsaClient.vb](./VB/CustomTsaClient/BouncyCastleTsaClient.vb))
+
 <!-- feedback -->
 ## Does this example address your development requirements/objectives?
 
