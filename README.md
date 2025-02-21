@@ -14,6 +14,12 @@ The **PDF Document API** allows you to use a timestamp for the signature. The fo
 * [Program.cs](./CS/CustomTsaClient/Program.cs) (VB: [Program.vb](./VB/CustomTsaClient/Program.vb))
 * [BouncyCastleTsaClient.cs](./CS/CustomTsaClient/BouncyCastleTsaClient.cs)  (VB :[BouncyCastleTsaClient.vb](./VB/CustomTsaClient/BouncyCastleTsaClient.vb))
 
+## More Examples
+
+* [Use a Custom Signer Class to Apply Signatures to a PDF Document](https://github.com/DevExpress-Examples/pdf-document-api-custom-signer)
+* [Use the Azure Key Vault API to Sign a PDF document](https://github.com/DevExpress-Examples/pdf-document-api-use-azure-key-vault-api-to-sign-document)
+* [Validate Document Signatures](https://github.com/DevExpress-Examples/pdf-document-api-signature-validation)
+
 <!-- feedback -->
 ## Does this example address your development requirements/objectives?
 

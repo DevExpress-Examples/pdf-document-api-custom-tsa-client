@@ -15,7 +15,7 @@ namespace CustomTsaClient
             using (var signer = new PdfDocumentSigner(@"Document.pdf"))
             {
                 //Create a custom timestamp client instance:
-                ITsaClient tsaClient = new BouncyCastleTsaClient(new Uri(@"https://freetsa.org/tsr"), new Sha256Digest());
+                ITsaClient tsaClient = new BouncyCastleTsaClient(new Uri(@"https://freetsa.org/tsr"), new Sha256Digest(), new System.Net.Http.HttpClient());
 
                 //Create a PKCS#7 signature:
                 Pkcs7Signer pkcs7Signature = new Pkcs7Signer(@"testcert.pfx", "123", HashAlgorithmType.SHA256, tsaClient);                
@@ -29,9 +29,9 @@ namespace CustomTsaClient
                 
                 //Sign and save the document:
                 signer.SaveDocument("SignedDocument.pdf", signatureBuilder);
-                Process.Start("SignedDocument.pdf");
+                
             }
-            return;
+            Process.Start(new ProcessStartInfo("SignedDocument.pdf") { UseShellExecute = true }); return;
         }
     }
 }

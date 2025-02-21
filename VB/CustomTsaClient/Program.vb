@@ -1,37 +1,36 @@
-﻿Imports DevExpress.Pdf
+﻿Option Infer On
+
+Imports DevExpress.Pdf
+Imports DevExpress.Office.DigitalSignatures
 Imports DevExpress.Office.Tsp
 Imports Org.BouncyCastle.Crypto.Digests
 Imports System
 Imports System.IO
 Imports System.Diagnostics
-Imports DevExpress.Office.DigitalSignatures
 
 Namespace CustomTsaClient
-    Friend NotInheritable Class Program
+	Friend Module Program
+		Sub Main(ByVal args() As String)
+			Using signer = New PdfDocumentSigner("Document.pdf")
+				'Create a custom timestamp client instance:
+				Dim tsaClient As ITsaClient = New BouncyCastleTsaClient(New Uri("https://freetsa.org/tsr"), New Sha256Digest(), New System.Net.Http.HttpClient())
 
-        Private Sub New()
-        End Sub
+				'Create a PKCS#7 signature:
+				Dim pkcs7Signature As New Pkcs7Signer("testcert.pfx", "123", HashAlgorithmType.SHA256, tsaClient)
 
-        Shared Sub Main(ByVal args() As String)
-            Using signer = New PdfDocumentSigner("Document.pdf")
-                'Create a custom timestamp client instance:
-                Dim tsaClient As ITsaClient = New BouncyCastleTsaClient(New Uri("https://freetsa.org/tsr"), New Sha256Digest())
+				'Apply the signature to the form field:
+				Dim signatureBuilder = New PdfSignatureBuilder(pkcs7Signature, "Sign")
 
-                'Create a PKCS#7 signature:
-                Dim pkcs7Signature As New Pkcs7Signer("testcert.pfx", "123", HashAlgorithmType.SHA256, tsaClient)
+				'Specify image data and signer information:
+				signatureBuilder.SetImageData(File.ReadAllBytes("JaneCooper.jpg"))
+				signatureBuilder.Location = "United Kingdom"
 
-                'Apply the signature to the form field:
-                Dim signatureBuilder = New PdfSignatureBuilder(pkcs7Signature, "Sign")
+				'Sign and save the document:
+				signer.SaveDocument("SignedDocument.pdf", signatureBuilder)
 
-                'Specify image data and signer information:
-                signatureBuilder.SetImageData(File.ReadAllBytes("JaneCooper.jpg"))
-                signatureBuilder.Location = "United Kingdom"
-
-                'Sign and save the document:
-                signer.SaveDocument("SignedDocument.pdf", signatureBuilder)
-                Process.Start("SignedDocument.pdf")
-            End Using
-            Return
-        End Sub
-    End Class
+			End Using
+			Process.Start(New ProcessStartInfo("SignedDocument.pdf") With {.UseShellExecute = True})
+			Return
+		End Sub
+	End Module
 End Namespace
